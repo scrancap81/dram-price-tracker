@@ -6,18 +6,24 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from io import StringIO
 
-url = 'https://www.trendforce.com/price/dram/dram_spot'
+url = {
+    'NAND_url': 'https://www.trendforce.com/price/flash/flash_spot',
+    'DRAM_url': 'https://www.trendforce.com/price/dram/dram_spot'
+}
 csv = 'dram_prices.csv'
-
-
     
-    
-def new_get_dram_data():
+def get_nand_data():
+    return scrape_trendforce_data(url['NAND_url'], "NAND")
+
+def get_dram_data():
+    return scrape_trendforce_data(url['DRAM_url'], "DRAM")
+
+def scrape_trendforce_data(url, type_label):
     scraper = cloudscraper.create_scraper()
 
-    try: 
+    try:
         response = scraper.get(url)
-        if response.status_code!= 200:
+        if response.status_code != 200:
             print(f"Error: {response.status_code}")
             return None
         
@@ -44,16 +50,16 @@ def new_get_dram_data():
 
             results.append({
                 "Date": datetime.now().strftime("%Y-%m-%d"),
+                "Type": type_label,
                 "Item": row["Item"],
                 "Session_Avg": row["Session Average"]
             })
-        
-        return results
     
+        return results
+
     except Exception as e:
         print(f"Error occured: {e}")
         return None
-    
 
 def update_csv(new_data):
     if not new_data:
@@ -76,5 +82,8 @@ def update_csv(new_data):
     print(f"susscessfully updated {csv}")
         
 if __name__ == "__main__":
-    data = new_get_dram_data()
-    update_csv(data)
+    dram_data = get_dram_data()
+    update_csv(dram_data)
+
+    nand_data = get_nand_data()
+    update_csv(nand_data)
