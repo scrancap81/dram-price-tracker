@@ -26,7 +26,9 @@ jobs:
         run: pip install cloudscraper pandas beautifulsoup4 lxml html5lib
 
       - name: Run scraper script
-        run: python pricescrape.py
+        run: |
+          python -m pip install cloudscraper pandas beautifulsoup4 lxml html5lib
+          python pricescrape.py
 
       - name: Commit and Push Data
         run: |
