@@ -2,11 +2,12 @@ name: Daily Price Scraper
 
 on:
   schedule:
-    - cron: '30 21 * * *' # Runs at 9:30 PM UTC
-  workflow_dispatch:      # Allows manual testing button
+    - cron: '05 09 * * *'
+    - cron: '30 21 * * *' 
+  workflow_dispatch:      
 
 permissions:
-  contents: write         # Allows saving the CSV
+  contents: write         
 
 jobs:
   run-scraper:
