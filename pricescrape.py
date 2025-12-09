@@ -4,19 +4,61 @@ import cloudscraper
 import pandas as pd
 from datetime import datetime
 from bs4 import BeautifulSoup
+import time 
 from io import StringIO
 
+# change name url 
+# change file names
+# update urls
+# update code pull
+# push git
+
+
 url = {
-    'NAND_url': 'https://www.trendforce.com/price/flash/flash_spot',
-    'DRAM_url': 'https://www.trendforce.com/price/dram/dram_spot'
+    'nand_flash_spot': 'https://www.trendforce.com/price/flash/flash_spot',
+    'nand_flash_contract': 'https://www.trendforce.com/price/flash/flash_contract',
+    'wafer_spot': 'https://www.trendforce.com/price/flash/wafer_spot',
+    'memory_card_spot': 'https://www.trendforce.com/price/flash/memCard_spot',
+    'oem_ssd': 'https://www.trendforce.com/price/flash/pcc_oem_ssd_contract',
+    'ssd_street': 'https://www.trendforce.com/price/flash/ssd_street',
+
+    'dram_spot': 'https://www.trendforce.com/price/dram/dram_spot',
+    'dram_contract': 'https://www.trendforce.com/price/dram/dram_contract',
+    'dram_module': 'https://www.trendforce.com/price/dram/module_spot',
+    'gddr_spot': 'https://www.trendforce.com/price/dram/gddr_spot',
 }
+
 csv = 'dram_prices.csv'
     
-def get_nand_data():
-    return scrape_trendforce_data(url['NAND_url'], "NAND")
+def get_nand_flash_spot_data():
+    return scrape_trendforce_data(url['nand_flash_spot'], "NAND")
 
-def get_dram_data():
-    return scrape_trendforce_data(url['DRAM_url'], "DRAM")
+def get_nand_flash_contract_data():
+    return scrape_trendforce_data(url['nand_flash_contract'], "NAND")
+
+def get_wafer_spot_data():
+    return scrape_trendforce_data(url['wafer_spot'], "NAND")
+
+def get_memory_card_spot_data():
+    return scrape_trendforce_data(url['memory_card_spot'], "NAND")
+
+def get_oem_ssd_data():
+    return scrape_trendforce_data(url['oem_ssd'], "NAND")
+
+def get_ssd_street_data():
+    return scrape_trendforce_data(url['ssd_street'], "NAND")
+
+def get_dram_spot_data():
+    return scrape_trendforce_data(url['dram_spot'], "DRAM")
+
+def get_dram_contract_data():
+    return scrape_trendforce_data(url['dram_contract'], 'DRAM')
+
+def get_dram_module_data():
+    return scrape_trendforce_data(url['dram_module'], 'DRAM')
+
+def get_gddr_spot_data():
+    return scrape_trendforce_data(url['gddr_spot'], "DRAM")
 
 def scrape_trendforce_data(url, type_label):
     scraper = cloudscraper.create_scraper()
@@ -82,8 +124,23 @@ def update_csv(new_data):
     print(f"susscessfully updated {csv}")
         
 if __name__ == "__main__":
-    dram_data = get_dram_data()
-    update_csv(dram_data)
 
-    nand_data = get_nand_data()
-    update_csv(nand_data)
+    scraping_jobs =[
+        get_nand_flash_contract_data,
+        get_nand_flash_spot_data,
+        get_memory_card_spot_data,
+        get_oem_ssd_data,
+        get_wafer_spot_data,          
+        get_dram_module_data,
+        get_dram_spot_data,
+        get_dram_contract_data,
+        get_wafer_spot_data,
+        get_ssd_street_data,
+    ]
+
+    for job in scraping_jobs:
+        data = job()
+        update_csv(data)
+        time.sleep(2)
+
+
