@@ -28,7 +28,7 @@ url = {
     'gddr_spot': 'https://www.trendforce.com/price/dram/gddr_spot',
 }
 
-csv = 'dram_prices.csv'
+csv = 'memory_prices.csv'
     
 def get_nand_flash_spot_data():
     return scrape_trendforce_data(url['nand_flash_spot'], "NAND")
